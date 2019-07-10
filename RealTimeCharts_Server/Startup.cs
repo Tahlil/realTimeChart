@@ -24,6 +24,14 @@ namespace RealTimeCharts_Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                builder => builder.WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+            .    AllowAnyHeader()
+                .AllowCredentials());
+            });
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -50,6 +58,8 @@ namespace RealTimeCharts_Server
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
+            
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
