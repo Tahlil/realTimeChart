@@ -8,3 +8,9 @@
           [colors]="colors"
           (chartClick)="chartClicked($event)"></canvas>
 </div>
+<br><br>
+<ul>
+  <li *ngFor='let data of signalRService.bradcastedData'>
+    <strong>Label: </strong> {{data.label}} - <strong>Value: </strong> {{data.data[0]}}
+  </li>
+</ul>
