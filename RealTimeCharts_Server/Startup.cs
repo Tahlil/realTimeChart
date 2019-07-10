@@ -24,12 +24,13 @@ namespace RealTimeCharts_Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
                 builder => builder.WithOrigins("http://localhost:4200")
                 .AllowAnyMethod()
-            .    AllowAnyHeader()
+                .AllowAnyHeader()
                 .AllowCredentials());
             });
             services.Configure<CookiePolicyOptions>(options =>
@@ -38,8 +39,6 @@ namespace RealTimeCharts_Server
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -59,7 +58,10 @@ namespace RealTimeCharts_Server
 
             app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
-            
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChartHub>("/chart");
+            });
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
